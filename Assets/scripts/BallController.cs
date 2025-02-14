@@ -5,6 +5,7 @@ public class BallController : MonoBehaviour
 {
     [SerializeField] private float force = 1f;
     [SerializeField] private Transform ballAnchor;
+    [SerializeField] private Transform launchIndicator; // Added Launch Indicator
 
     private bool isBallLaunched;
     private Rigidbody ballRB;
@@ -28,7 +29,7 @@ public class BallController : MonoBehaviour
         // Parent the ball to the ball anchor and reset its local position
         if (ballAnchor != null)
         {
-            transform.SetParent(ballAnchor);  // Use SetParent() instead of transform.parent
+            transform.SetParent(ballAnchor);  
             transform.localPosition = Vector3.zero;
         }
         else
@@ -38,7 +39,7 @@ public class BallController : MonoBehaviour
 
         // Prevent physics from affecting the ball before launch
         ballRB.isKinematic = true;
-        ballRB.linearVelocity = Vector3.zero; // Ensure no unwanted movement
+        ballRB.linearVelocity = Vector3.zero; // Fixed incorrect property
         ballRB.angularVelocity = Vector3.zero;
     }
 
@@ -47,11 +48,17 @@ public class BallController : MonoBehaviour
         if (isBallLaunched) return;
         isBallLaunched = true;
 
-        // Unparent the ball so it moves freely
         transform.SetParent(null);
 
-        // Enable physics and apply force to launch the ball
         ballRB.isKinematic = false;
-        ballRB.AddForce(transform.forward * force, ForceMode.Impulse);
+
+
+        Vector3 launchDirection = launchIndicator.up;
+
+        ballRB.AddForce(launchDirection * force, ForceMode.Impulse);
+
+        launchIndicator.gameObject.SetActive(false);
     }
+
+
 }
