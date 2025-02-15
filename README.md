@@ -26,11 +26,8 @@ This is a bowling game built in Unity that focuses on physics-based gameplay. Pl
 ---
 
 ## Gameplay Demo
-Upload a video of how the game works here.  
-(You can add a YouTube link, GIF, or MP4 file here once recorded.)
 
-Gameplay Video:  
-[Insert Video Link Here]
+
 
 ---
 
