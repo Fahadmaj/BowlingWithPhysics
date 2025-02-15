@@ -8,12 +8,17 @@ public class FallTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider triggeredObject)
     {
-        // Ensure only the first fall is detected and only when hitting the ground
         if (!isPinFallen && triggeredObject.CompareTag("Ground"))
         {
             isPinFallen = true;
             OnPinFall?.Invoke();
-            Debug.Log($"{gameObject.name} has fallen!");
+            Debug.Log($"{gameObject.name} has fallen!"); // ✅ Debug log
         }
+    }
+
+    // ✅ Reset this when the game resets
+    public void ResetFall()
+    {
+        isPinFallen = false;
     }
 }

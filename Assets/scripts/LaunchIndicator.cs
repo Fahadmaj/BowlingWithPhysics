@@ -10,15 +10,18 @@ public class LaunchIndicator : MonoBehaviour
 
     void Update()
     {
-        if (ball == null || freeLookCamera == null) return;
+        if (ball == null || freeLookCamera == null)
+        {
+            Debug.LogError("LaunchIndicator: Ball or FreeLook Camera is not assigned!");
+            return;
+        }
 
-        
-        transform.position = ball.position + freeLookCamera.transform.forward * offset.z;
+        // ✅ Keep the indicator positioned in front of the ball
+        Vector3 forward = freeLookCamera.transform.forward;
+        forward.y = 0; // Ignore vertical tilt
+        transform.position = ball.position + forward.normalized * offset.z;
 
-        
-        transform.forward = freeLookCamera.transform.forward;
-
-        
-        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        // ✅ Ensure the indicator only rotates on the Y-axis
+        transform.forward = forward.normalized;
     }
 }

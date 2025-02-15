@@ -5,6 +5,7 @@ public class InputManager : MonoBehaviour
 {
     public UnityEvent<Vector2> OnMove = new UnityEvent<Vector2>();
     public UnityEvent OnSpacePressed = new UnityEvent();
+    public UnityEvent OnResetPressed = new UnityEvent();
 
     private void Update()
     {
@@ -13,11 +14,20 @@ public class InputManager : MonoBehaviour
             OnSpacePressed?.Invoke();
         }
 
-        // Capture movement input (e.g., for arrow keys or WASD)
-        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        if (moveInput != Vector2.zero)
+        Vector2 input = Vector2.zero;
+        if (Input.GetKey(KeyCode.A))
         {
-            OnMove?.Invoke(moveInput);
+            input += Vector2.left;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            input += Vector2.right;
+        }
+        OnMove?.Invoke(input);
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            OnResetPressed?.Invoke();
         }
     }
 }

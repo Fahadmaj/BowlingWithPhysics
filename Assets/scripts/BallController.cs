@@ -1,46 +1,44 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(Rigidbody))]
 public class BallController : MonoBehaviour
 {
-    [SerializeField] private float force = 1f;
     [SerializeField] private Transform ballAnchor;
-    [SerializeField] private Transform launchIndicator; // Added Launch Indicator
-
-    private bool isBallLaunched;
+    [SerializeField] private GameObject launchIndicator;
     private Rigidbody ballRB;
+    private bool isBallLaunched;
     private InputManager inputManager;
 
-    void Start()
+    private void Start()
     {
         ballRB = GetComponent<Rigidbody>();
-
-        // Ensure InputManager is assigned
         inputManager = FindObjectOfType<InputManager>();
+
         if (inputManager != null)
         {
             inputManager.OnSpacePressed.AddListener(LaunchBall);
         }
-        else
-        {
-            Debug.LogError("InputManager not found! Ensure it's in the scene.");
-        }
 
-        // Parent the ball to the ball anchor and reset its local position
-        if (ballAnchor != null)
-        {
-            transform.SetParent(ballAnchor);  
-            transform.localPosition = Vector3.zero;
-        }
-        else
-        {
-            Debug.LogError("BallAnchor is not assigned in the Inspector.");
-        }
+        ResetBall();
+    }
 
-        // Prevent physics from affecting the ball before launch
-        ballRB.isKinematic = true;
-        ballRB.linearVelocity = Vector3.zero; // Fixed incorrect property
+    public void ResetBall()
+    {
+        isBallLaunched = false;
+
+        ballRB.isKinematic = false;
+        ballRB.linearVelocity = Vector3.zero;
         ballRB.angularVelocity = Vector3.zero;
+        ballRB.isKinematic = true;
+
+        transform.SetParent(ballAnchor);
+        transform.localPosition = Vector3.zero;
+
+        if (launchIndicator != null)
+        {
+            launchIndicator.SetActive(true);
+        }
     }
 
     private void LaunchBall()
@@ -49,16 +47,12 @@ public class BallController : MonoBehaviour
         isBallLaunched = true;
 
         transform.SetParent(null);
-
         ballRB.isKinematic = false;
+        ballRB.AddForce(transform.forward * 10f, ForceMode.Impulse);
 
-
-        Vector3 launchDirection = launchIndicator.up;
-
-        ballRB.AddForce(launchDirection * force, ForceMode.Impulse);
-
-        launchIndicator.gameObject.SetActive(false);
+        if (launchIndicator != null)
+        {
+            launchIndicator.SetActive(false);
+        }
     }
-
-
 }
