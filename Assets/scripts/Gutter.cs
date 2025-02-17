@@ -6,20 +6,12 @@ public class Gutter : MonoBehaviour
     {
         if (other.CompareTag("Ball")) // Ensure the ball has the tag "Ball"
         {
-            Debug.Log("Ball entered the gutter!");
-            ResetBall(other.gameObject);
-        }
-    }
+            Rigidbody ballRigidBody = other.GetComponent<Rigidbody>();
+            float velocityMagnitude = ballRigidBody.linearVelocity.magnitude;
+            ballRigidBody.linearVelocity = Vector3.zero;
+            ballRigidBody.angularVelocity = Vector3.zero;
+            ballRigidBody.AddForce(transform.up * velocityMagnitude, ForceMode.VelocityChange);
 
-    private void ResetBall(GameObject ball)
-    {
-        // Reset the ball position (Adjust the position to fit your game)
-        ball.transform.position = new Vector3(0, 1, 0); // Change as needed
-        Rigidbody rb = ball.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero; // Stop ball movement
-            rb.angularVelocity = Vector3.zero; // Stop spinning
         }
-    }
+   }
 }

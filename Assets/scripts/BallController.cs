@@ -48,7 +48,7 @@ public class BallController : MonoBehaviour
 
         transform.SetParent(null);
         ballRB.isKinematic = false;
-        ballRB.AddForce(transform.forward * 10f, ForceMode.Impulse);
+        ballRB.AddForce(launchIndicator.transform.forward * 10f, ForceMode.Impulse);
 
         if (launchIndicator != null)
         {
